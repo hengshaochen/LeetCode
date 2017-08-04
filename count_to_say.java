@@ -20,7 +20,7 @@ public class Solution {
                 }
             }
             current = next.toString();
-            next.setLength(0); // 清空stringBuilder.
+            next.setLength(0); // 清空stringBuilder
         }
         return current;
     }
