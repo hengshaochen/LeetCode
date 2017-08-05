@@ -21,8 +21,9 @@ public class Solution {
             }
         }
         
-        if (nums[end] == target) { return end; }
+        // 若要找first position, start放前面, 若要找last position, end放前面
         if (nums[start] == target) { return start; }
+        if (nums[end] == target) { return end; }
         return -1;
     }
 }
