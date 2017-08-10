@@ -27,7 +27,7 @@ public class Solution {
     }
 }
 /*
-錯誤版本, s="abc", t="foo" 會出錯, 要掃兩次, 而且不應該使用兩個Map, 使用1個即可, 第二：用數字當value在這題有點奇怪, 應直接使用原本的char當value
+錯誤版本, 一個很長的test case會出錯 尚未得知原因, 要掃兩次, 而且不應該使用兩個Map, 使用1個即可, 第二：用數字當value在這題有點奇怪, 應直接使用原本的char當value
 public class Solution {
     public boolean isIsomorphic(String s, String t) {
         if (s.length() != t.length()) { return false; }
