@@ -11,7 +11,7 @@ public class Solution {
                 map.put(pattern.charAt(i), splitStr[i]);
             }
             // Step2: 接著使用各自的當前char 去map.get() 找到對應的value, 若兩者相等 則繼續往下, 兩者不相等, 則return false
-            //if (map.get(pattern.charAt(i)) != splitStr[i]) { //這行這樣會寫有bug why?
+            //if (map.get(pattern.charAt(i)) != splitStr[i]) { // 因為String是class, 用!=是比較物件地址, 要使用class的function
             if ((map.get(pattern.charAt(i))).compareTo(splitStr[i]) != 0 ) {
                 return false;
             }
