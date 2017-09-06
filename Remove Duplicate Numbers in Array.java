@@ -1,4 +1,4 @@
-// TLE版本
+// 兩指標 + HashMap --> 邊做邊覆蓋
 public class Solution {
     /**
      * @param nums an array of integers
@@ -25,7 +25,7 @@ public class Solution {
     }
 }
 
-// 不用指標 Time: O(n) Space: O(n)
+// 不用指標 Time: O(n) Space: O(n) , 建立完HashMap再進行覆蓋
 public class Solution {
     /**
      * @param nums an array of integers
@@ -48,5 +48,28 @@ public class Solution {
         }
         
         return map.size();
+    }
+}
+
+// 兩指標, 沒有額外空間 Time: O(nlogn) Space: O(1)
+public class Solution {
+    /**
+     * @param nums an array of integers
+     * @return the number of unique integers
+     */
+    public int deduplication(int[] nums) {
+        // 法2: 先進行排序O(nlogn), 所有重複的數字都會黏再一起, 所以指標只要in place掃一次就可以偵測到是否有重複, 因為1,1,2,3, 不會是1,3,2,1, 這樣重複的一定在旁邊, 指標一直向右移動可以找到所有重複的
+        // Algo: replacePtr指向重複的元素的前一個, 要把指標i的值蓋到++replacePtr中
+        // init i = 0, replacePtr = 1
+        // 若不相等, 則覆蓋, 若相等i繼續跑
+        if (nums == null || nums.length == 0) { return 0; }
+        Arrays.sort(nums);
+        int replacePtr = 0;
+        for (int i = 0; i < nums.length; i++) {
+            if (nums[i] != nums[replacePtr]) {
+                nums[++replacePtr] = nums[i];
+            }
+        }
+        return replacePtr + 1;
     }
 }
