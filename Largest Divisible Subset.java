@@ -23,7 +23,7 @@ public class Solution {
                 // 如果新來的數字都可以整除前面所有數字 --> 加入
                 if (f[i] < f[j] + 1 && nums[i] % nums[j] == 0) {
                     f[i] = f[j] + 1;
-                    pre[i] = j;
+                    pre[i] =  j;
                 }
             }
         }
@@ -35,10 +35,12 @@ public class Solution {
                 maxIdx = i;
             }
         }
-        
-        for (int i = maxIdx; i >= 0;) { //回溯解集
-            ans.add(nums[i]);
-            i = pre[i];
+
+        // 將答案序列放到ans
+        int idx = maxIdx;
+        while (idx >= 0) {
+            ans.add(nums[idx]);
+            idx = pre[idx];
         }
         
         return ans;
