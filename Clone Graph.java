@@ -65,3 +65,78 @@ public class Solution {
         }
     }
 }
+
+/*
+Review: 9/27
+
+
+
+public class Solution {
+
+    public UndirectedGraphNode cloneGraph(UndirectedGraphNode node) {
+        ArrayList<UndirectedGraphNode> nodeSet = new ArrayList<>();
+        HashMap<UndirectedGraphNode, UndirectedGraphNode> mapping = new HashMap<>();
+        // 走訪每一個node, 把所有node存在arrayList
+        nodeSet = getNode(node);
+        
+        for (UndirectedGraphNode cur : nodeSet) {
+            System.out.println(cur.label);
+        }
+        
+        // 複製node, 且新舊node用hashmap對應 <old, new>
+        mapping = cloneNode(nodeSet);
+        
+        // 複製邊
+        cloneEdge(nodeSet, mapping);
+        
+        return mapping.get(node);
+    }
+    
+    public void cloneEdge(ArrayList<UndirectedGraphNode> nodeSet, HashMap<UndirectedGraphNode, UndirectedGraphNode> mapping) {
+        // 要給新的點附上邊, 掃一次所有的點, 根據old的neighbor給 new附上邊
+        for (UndirectedGraphNode cur : nodeSet) {
+            for (UndirectedGraphNode curNeighbor : cur.neighbors) {
+                mapping.get(cur).neighbors.add(mapping.get(curNeighbor));
+            }
+        }
+        
+    }
+    
+    public HashMap<UndirectedGraphNode, UndirectedGraphNode> cloneNode(ArrayList<UndirectedGraphNode> nodeSet) {
+        
+        HashMap<UndirectedGraphNode, UndirectedGraphNode> mapping = new HashMap<>();
+        
+        for (UndirectedGraphNode cur : nodeSet) {
+            mapping.put(cur, new UndirectedGraphNode(cur.label));
+        }
+        
+        return mapping;
+    }
+    
+    public ArrayList<UndirectedGraphNode> getNode(UndirectedGraphNode node) {
+        ArrayList<UndirectedGraphNode> nodeSet = new ArrayList<>();
+        
+        Queue<UndirectedGraphNode> q = new LinkedList<>();
+        if (node != null) { 
+            q.add(node);
+            nodeSet.add(node);
+        }
+        
+        // BFS
+        while (!q.isEmpty()) {
+            UndirectedGraphNode cur = q.remove();
+            
+            for (UndirectedGraphNode neighbor : cur.neighbors) {
+                // 要使用nodeSet當條件, 若用q, 會造成刪除後, 又加入又走訪一遍
+                // 圖和樹的差異在於: 圖可能會走訪回已經走訪過得點
+                if (!nodeSet.contains(neighbor)) {
+                    q.add(neighbor);
+                    nodeSet.add(neighbor);
+                }
+            }
+        }
+        
+        return nodeSet;
+    }
+}
+*/
