@@ -34,7 +34,7 @@ public class Solution {
                 f[a] = b;
             }
         }
-        // 回傳x所在集合的父親
+        // 回傳x所在集合親
         public int find(int x) {
             if (f[x] < 0) {
                 return x;
@@ -51,7 +51,7 @@ public class Solution {
         // 克魯斯卡演算法
         // 排序邊 由小到大
         Collections.sort(connections, new Comparator<Connection>() {
-            public int compare(Connection a, Connection b) {
+            public int compare( a, Connection b) {
                 if (a.cost != b.cost) {
                     return a.cost - b.cost;
                 }
@@ -59,7 +59,7 @@ public class Solution {
                 if (a.city1.equals(b.city1)) {
                     return a.city2.compareTo(b.city2); 
                 }
-                // 兩組邊的cost相同, 但city1不同, 回傳英文字母比較小的city
+                // 兩組邊的cost相同, 但city1不同, 回傳英文字母比較小的city1
                 // 例如[B,C,2] [A,C,2] 選[A,C,2]
                 return a.city1.compareTo(b.city1); 
             }
