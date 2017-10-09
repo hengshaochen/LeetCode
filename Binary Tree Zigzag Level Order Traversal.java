@@ -29,16 +29,15 @@ public class Solution {
             
             for (int i = 0; i < qSize; i++) {
                 TreeNode cur_node = q.remove();
-                level.add(cur_node.val);
+                if (level_count % 2 == 0) {
+                    level.add(0, cur_node.val);
+                } else {
+                    level.add(cur_node.val);
+                }
                 if (cur_node.left != null) { q.add(cur_node.left); }
                 if (cur_node.right != null) { q.add(cur_node.right); }
             }
-            if (level_count % 2 == 0) {
-                Collections.reverse(level);
-                ans.add(new ArrayList<Integer>(level));
-            } else {
-                ans.add(new ArrayList<Integer>(level));
-            }
+            ans.add(new ArrayList<Integer>(level));
         }
         
         return ans;
