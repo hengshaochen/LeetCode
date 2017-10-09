@@ -1,39 +1,46 @@
 /**
- * Definition for a binary tree node.
+ * Definition of TreeNode:
  * public class TreeNode {
- *     int val;
- *     TreeNode left;
- *     TreeNode right;
- *     TreeNode(int x) { val = x; }
+ *     public int val;
+ *     public TreeNode left, right;
+ *     public TreeNode(int val) {
+ *         this.val = val;
+ *         this.left = this.right = null;
+ *     }
  * }
  */
+
+
 public class Solution {
+
     public List<List<Integer>> zigzagLevelOrder(TreeNode root) {
         List<List<Integer>> ans = new ArrayList<List<Integer>>();
         if (root == null) { return ans; }
-        Queue<TreeNode> q = new LinkedList<TreeNode>();
-        q.add(root);
         
-        // while (q != null) 會有bug 改成isEmpty() ok!
-        boolean isEven = false;
-        while (!q.isEmpty()) {
-            int LevelSize = q.size();
-            ArrayList<Integer> local = new ArrayList<Integer>();
-            for (int i=0 ; i < LevelSize ; i++) {
-                TreeNode currentNode = q.remove();
-                if (currentNode.left != null) { q.add(currentNode.left); }
-                if (currentNode.right != null) { q.add(currentNode.right); }
-                local.add(currentNode.val);
+        Queue<TreeNode> q = new LinkedList<>();
+        q.add(root);
+        int level_count = 0;
+        
+        while(!q.isEmpty()) {
+            List<Integer> level = new ArrayList<>();
+            
+            level_count += 1;
+            int qSize = q.size();
+            
+            for (int i = 0; i < qSize; i++) {
+                TreeNode cur_node = q.remove();
+                level.add(cur_node.val);
+                if (cur_node.left != null) { q.add(cur_node.left); }
+                if (cur_node.right != null) { q.add(cur_node.right); }
             }
-            if (isEven == false) {
-                ans.add(local);
-                isEven = true;
+            if (level_count % 2 == 0) {
+                Collections.reverse(level);
+                ans.add(new ArrayList<Integer>(level));
             } else {
-                Collections.reverse(local);
-                ans.add(local);
-                isEven = false;
+                ans.add(new ArrayList<Integer>(level));
             }
         }
+        
         return ans;
     }
 }
