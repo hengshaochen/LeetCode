@@ -1,4 +1,4 @@
-// 失敗版本 哀
+// 失敗版本
 public class Solution {
     /*
      * @param source : A string
@@ -100,49 +100,54 @@ public class Solution {
 }
 
 // 標準答案
-public class Solution {    
-    int initTargetHash(int []targethash, String Target) {
-        int targetnum =0 ;
-        for (char ch : Target.toCharArray()) {
-            targetnum++;
-            targethash[ch]++;
+public class Solution {
+
+    // i, j指標記錄當前source的window
+    // s_map記錄i~j(不包含j)範圍內的各個符號數量
+    // t_map記錄target的各個符號數量
+    public String minWindow(String source , String target) {
+        String ans = "";
+        int ans_length = Integer.MAX_VALUE;
+        int[] s_map = new int[256];
+        int[] t_map = new int[256];
+        
+        // init t_map
+        for (int i = 0; i < target.length(); i++) {
+            t_map[target.charAt(i)]++;
         }
-        return targetnum;
-    }
-    
-    boolean valid(int []sourcehash, int []targethash) {
         
-        for(int i = 0; i < 256; i++) {
-            if(targethash[i] > sourcehash[i])    
-                return false;
-        }
-        return true;
-    }
-    
-    public String minWindow(String Source, String Target) {
-        int ans = Integer.MAX_VALUE;
-        String minStr = "";
-        
-        int[] sourcehash = new int[256];
-        int[] targethash = new int[256];
-        
-        initTargetHash(targethash, Target);
+        // 兩個指標i與j, 若不合法, j向右移動.
+        // i向右移動, 因為希望確定有一個合法後, 開始把i向右移動, 嘗試讓他更短
         int i = 0, j = 0;
-        for(i = 0; i < Source.length(); i++) {
-            // 不合法, 右邊指標往右移動
-            while( !valid(sourcehash, targethash) && j < Source.length()  ) {
-                sourcehash[Source.charAt(j)]++;
+        while (i < source.length()) {
+            // 不合法, j向右移動, 注意：不能移動超過邊界
+            while (!compareMap(s_map, t_map) && j < source.length()) {
+                s_map[source.charAt(j)]++;
                 j++;
             }
-            // 合法, 左邊指標往右移動
-            if(valid(sourcehash, targethash) ){
-                if(ans > j - i ) {
-                    ans = Math.min(ans, j - i );
-                    minStr = Source.substring(i, j );
+            // 若合法, 看看是否比當前最小值還小
+            if (compareMap(s_map, t_map)) {
+                if (ans_length > j - i) {
+                    ans = source.substring(i, j);
+                    ans_length = j - i;
                 }
             }
-            sourcehash[Source.charAt(i)]--;
+            
+            // i向右移動
+            s_map[source.charAt(i)]--;
+            i++;
         }
-        return minStr;
+        
+        return ans;
+    }
+    
+    // 比較兩個map, 若t_map有任何符號的數量 > s_map --> return false
+    public boolean compareMap(int[] s_map, int[] t_map) {
+        for (int i = 0; i < 256; i++) {
+            if (t_map[i] > s_map[i]) {
+                return false;
+            }
+        }
+        return true;
     }
 }

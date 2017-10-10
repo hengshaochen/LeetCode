@@ -1,11 +1,10 @@
-// WA 73%
 public class Solution {
     /*
      * @param x: the base number
      * @param n: the power number
      * @return: the result
      */
-    public double myPow(double x, int n) {
+    public double myPow(double x, long n) {
         if (x == 0 || x == 1 || n == 1) {
             return x;
         }
