@@ -38,3 +38,27 @@ public class Solution {
     }
     */
 }
+
+// Version2: 10/10  
+public class Solution {
+    /**
+     * @param nums an integer array
+     * @return nothing, do this in-place
+     */
+    public void moveZeroes(int[] nums) {
+        if (nums == null || nums.length == 0) { return; }
+        // j指向非0
+        // j每次一定向右移動, i只有確定交換了才移動
+        int i = 0, j = 0;
+        
+        while (j < nums.length) {
+            if (nums[j] != 0) {
+                int temp = nums[i];
+                nums[i] = nums[j];
+                nums[j] = temp;  
+                i++;
+            }
+            j++;
+        }
+    }
+}
