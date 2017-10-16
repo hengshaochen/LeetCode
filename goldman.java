@@ -20,10 +20,29 @@ class Solution {
     }
 }
 
-// 4.
+// 4. K-select
 
 // 5.
-
+class Solution {
+    public int firstUniqChar(String s) {
+        // use hashmap, scan 1 times
+        //HashMap<Character, Integer> map = new HashMap<>();
+        int[] map = new int[256];
+        
+        for (int i = 0; i < s.length(); i++) {
+            map[s.charAt(i)] += 1;
+        }
+        
+        // scan again, and get the cur char value in map 
+        for (int i = 0; i < s.length(); i++) {
+            if (map[s.charAt(i)] == 1) {
+                return i;
+            }    
+        }
+        
+        return -1;
+    }
+}
 
 // 6.
 class Solution {
@@ -93,3 +112,20 @@ class Main {
 }
 
 // 10.
+public class Solution {
+    public String reverseWords(String s) {
+        String ans = "";
+        
+        String[] sp = s.split(" ");
+        for (int i = sp.length - 1; i >= 0; i--) {
+            if (!sp[i].equals("")) {
+                ans = ans + ' ' + sp[i];
+            }
+        }
+        
+        if (ans.length() == 0) { 
+            return ans; 
+        }
+        return ans.substring(1, ans.length());
+    }
+}
