@@ -1,6 +1,122 @@
 // 1.
 
 // 2.
+class Main {
+    public static void main(String[] args) {
+    class Point {
+        int scores;
+        int count;
+        Point(int scores, int count) {
+            this.scores = scores;
+            this.count = count;
+        }
+    }
+        // class Point: total_score, count
+        // Map<Name, Point>
+        // 思路：掃一遍table, 每次把total_score加上當前score, count++
+        String[][] table = new String[3][2];
+        table[0][0] = "Henry";
+        table[0][1] = "100";
+        table[1][0] = "Henry";
+        table[1][1] = "-200";
+        table[2][0] = "Ge";
+        table[2][1] = "85";
+
+        HashMap<String, Point> map = new HashMap<>();                           
+        //map.put(table[0][0], new Point(Integer.parseInt(table[0][1]), 1));
+
+        Point a = new Point(1,2);
+        HashMap<String, Point> map2 = new HashMap<>();
+        /*map2.put(table[0][0],new Point(2,3));
+        map2.get(table[0][0]).scores = 10;
+        System.out.println(map2.get(table[0][0]).scores);*/
+        
+        for (int i = 0; i < table.length; i++) {
+            if (!map.containsKey(table[i][0])) {
+                map.put(table[i][0], new Point(Integer.parseInt(table[i][1]), 1));
+            } else {
+                map.get(table[i][0]).scores = map.get(table[i][0]).scores +                                 Integer.parseInt(table[i][1]);
+                
+                map.get(table[i][0]).count = map.get(table[i][0]).count + 1;
+            }
+            
+        }
+        
+        // 掃一遍map算平均, 並加入一個max_value同時挑戰
+        int max_avg = Integer.MIN_VALUE;
+        for (String cur : map.keySet()) {
+            int current_avg = map.get(cur).scores / map.get(cur).count;
+            if (current_avg > max_avg) {
+                max_avg = current_avg;
+            }
+        }
+        
+        System.out.println(max_avg);
+    }
+}
+
+// 2. Double Version
+class Main {
+    /*
+        int a = -123;
+        double b = -123;
+        System.out.println(a / 10); ans: -12
+        System.out.println((int) Math.floor(b / 10));  ans: -13 correct
+    */
+    
+    public static void main(String[] args) {
+    class Point {
+        double scores;
+        int count;
+        Point(double scores, int count) {
+            this.scores = scores;
+            this.count = count;
+        }
+    }
+        // class Point: total_score, count
+        // Map<Name, Point>
+        // 思路：掃一遍table, 每次把total_score加上當前score, count++
+        String[][] table = new String[3][2];
+        table[0][0] = "Henry";
+        table[0][1] = "100";
+        table[1][0] = "Henry";
+        table[1][1] = "-200";
+        table[2][0] = "Ge";
+        table[2][1] = "85";
+
+        HashMap<String, Point> map = new HashMap<>();                           
+        //map.put(table[0][0], new Point(Integer.parseInt(table[0][1]), 1));
+
+        Point a = new Point(1,2);
+        HashMap<String, Point> map2 = new HashMap<>();
+        /*map2.put(table[0][0],new Point(2,3));
+        map2.get(table[0][0]).scores = 10;
+        System.out.println(map2.get(table[0][0]).scores);*/
+        
+        for (int i = 0; i < table.length; i++) {
+            if (!map.containsKey(table[i][0])) {
+                map.put(table[i][0], new Point(Double.parseDouble(table[i][1]), 1));
+            } else {
+                map.get(table[i][0]).scores = map.get(table[i][0]).scores +                                 Double.parseDouble(table[i][1]);
+                
+                map.get(table[i][0]).count = map.get(table[i][0]).count + 1;
+            }
+            
+        }
+        
+        // 掃一遍map算平均, 並加入一個max_value同時挑戰
+        double max_avg = Double.MIN_VALUE;
+        for (String cur : map.keySet()) {
+            double current_avg = map.get(cur).scores / map.get(cur).count;
+            current_avg = Math.floor(current_avg);
+            if (current_avg > max_avg) {
+                max_avg = current_avg;
+            }
+        }
+        
+        System.out.println((int) max_avg);
+    }
+}
 
 // 3.
 class Solution {
@@ -81,6 +197,48 @@ class Solution {
 // 7.
 
 // 8.
+public class Solution {
+    /*
+     * @param nums: an array of integer
+     * @param target: An integer
+     * @return: An integer
+     */
+    public int twoSum6(int[] nums, int target) {
+        
+        Arrays.sort(nums);
+        
+        int l = 0;
+        int r = nums.length - 1;
+        int count = 0;
+        
+        while (l < r) {
+            int sum = nums[l] + nums[r];
+            
+            if (sum == target) {
+                count++;
+                
+                l++;
+                r--;
+                
+                while (l < r && nums[l] == nums[l - 1]) {
+                    l++;
+                }
+                while (l < r && nums[r] == nums[r + 1]) {
+                    r--;
+                }
+            } else if (sum > target) {
+                r--;
+            } else {
+                l++;
+            }
+            
+        }
+        return count;
+        
+    }
+    
+    
+}
 
 // 9.
 class Main {

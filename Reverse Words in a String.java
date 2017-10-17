@@ -41,3 +41,33 @@ public class Solution {
         return ans.substring(1, ans.length());
     }
 }
+
+// 變形題 III
+
+public class Solution {
+    public String reverseWords(String s) {
+        String ans = "";
+        
+        String[] sp = s.split(" ");
+        for (int i = 0; i <= sp.length - 1; i++) {
+            if (!sp[i].equals("")) {
+                ans = ans + ' ' + reverse(sp[i]);
+            }
+        }
+        
+        if (ans.length() == 0) { 
+            return ans; 
+        }
+        return ans.substring(1, ans.length());
+    }
+    
+    String reverse(String input) {
+        String output = "";
+        
+        for (int i = input.length() - 1; i >= 0 ; i--) {
+            output = output + input.charAt(i);
+        }
+        
+        return output;
+    }
+}
