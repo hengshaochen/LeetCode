@@ -1,4 +1,23 @@
 // 1.
+class Main {
+    public static void main(String[] args) {
+        String s = "caaab";
+        int k = 2;
+        HashSet<String> set = new HashSet<>();
+        List<String> list = new ArrayList<>();
+        
+        for (int i = 0; i < s.length() - 1; i++) {
+            String cur = s.substring(i, i + k);
+            if (!set.contains(cur)) {
+                set.add(cur);
+                list.add(cur);
+            }
+        }
+        Collections.sort(list);
+        System.out.println(list);
+        
+    }
+}
 
 // 2.
 class Main {
@@ -195,6 +214,49 @@ class Solution {
 }
 
 // 7.
+class Main {
+    public static void main(String[] args) {
+        List<ArrayList<Integer>> a = new ArrayList<ArrayList<Integer>>();
+        ArrayList<Integer> cur_a = new ArrayList<>();
+        
+        cur_a.add(1);
+        cur_a.add(2);
+        cur_a.add(3);
+        a.add(new ArrayList(cur_a));
+        cur_a.clear();
+        cur_a.add(1);
+        cur_a.add(2);
+        cur_a.add(1);
+        a.add(new ArrayList(cur_a));
+        System.out.println(a.get(0));
+        System.out.println(a.get(1));
+        
+        
+        List<ArrayList<Integer>> b = new ArrayList<ArrayList<Integer>>();
+        ArrayList<Integer> cur_b = new ArrayList<>();
+        
+        cur_b.add(4);
+        cur_b.add(5);
+        cur_b.add(6);
+        b.add(new ArrayList(cur_b));
+        cur_b.clear();
+        cur_b.add(2);
+        cur_b.add(2);
+        cur_b.add(2);
+        b.add(new ArrayList(cur_b));
+        System.out.println(b.get(0));
+        System.out.println(b.get(1));
+        
+        int product = 0;
+        for (int i = 0; i < a.size(); i++) {
+            for (int j = 0; j < a.get(0).size(); j++) {
+                product = product + a.get(i).get(j) * b.get(i).get(j);
+            }
+        }
+        
+        System.out.println(product);
+    }
+}
 
 // 8.
 public class Solution {
