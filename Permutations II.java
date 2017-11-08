@@ -49,3 +49,44 @@ class Solution {
         }
     }
 }
+
+// review 11/08
+class Solution {
+    public List<List<Integer>> permuteUnique(int[] nums) {
+        // 思路：跟subset差不多, 把它改成每次可以從0開始, 但是遇到有重複的數字continue掉 (若和前面一個數字相同, 不continue)
+        Arrays.sort(nums);
+        List<List<Integer>> ans = new ArrayList<>();
+        List<Integer> cur = new ArrayList<>();
+
+        boolean[] visited = new boolean[nums.length];
+        Arrays.fill(visited, false);
+        
+        dfs(nums, visited, cur, ans);
+        return ans;
+    }
+    
+    void dfs(int[] nums, boolean[] visited, List<Integer> cur, List<List<Integer>> ans) {
+        if (cur.size() == nums.length) {
+            ans.add(new ArrayList<Integer>(cur));
+            return;
+        }
+        
+        for (int i = 0; i < nums.length; i++) {
+            if (visited[i] == true) {
+                continue;
+            }
+            // 前一個沒選, 卻選了下一個 要continue:  例如 1, 2, 2' --> 可以122' 但不能12'2
+            if (i >= 1 && visited[i - 1] == false && nums[i] == nums[i - 1]) {
+                continue;
+            }
+            
+            cur.add(nums[i]);
+            visited[i] = true;
+            
+            dfs(nums, visited, cur, ans);
+            
+            cur.remove(cur.size() - 1);
+            visited[i] = false;
+        }
+    }
+}
