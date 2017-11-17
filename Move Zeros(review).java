@@ -41,3 +41,29 @@ public class Solution {
         }
     }
 }
+
+// 11/16 不好的方法
+class Solution {
+    public void moveZeroes(int[] nums) {
+        // 1,0,9,3,2,0
+        // i
+        // j
+        int i = 0;
+        int j = 0;
+        // i的左邊都沒有0, j找非0的 --> 交換
+        while (j < nums.length) {
+            while (i < nums.length && nums[i] != 0) {
+                i++;
+                j++;
+            }
+            while (j < nums.length && nums[j] == 0) {
+                j++;
+            }
+            
+            if (i < nums.length && j < nums.length) {
+                nums[i++] = nums[j];
+                nums[j++] = 0;
+            }
+        }
+    }
+}
