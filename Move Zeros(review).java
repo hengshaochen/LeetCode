@@ -6,7 +6,7 @@ public class Solution {
      */
     public void moveZeroes(int[] nums) {
         int i = 0; // left element of i all non-zero
-        int j = 0; // j find not zero element
+        int j = 0; // j find not zero element(j找非0)
         
         while (j < nums.length) {
             if (nums[j] != 0) {
