@@ -126,3 +126,37 @@ class Solution {
         return tail;
     }
 }
+
+// recursive 2 issue now: 1) 最後有carry 2) 兩個長度不同時, 不會一起把指標指到尾端
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    int carry = 0;
+    public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
+        if (l1 == null || l2 == null) {
+            return null;
+        }
+        
+        ListNode tail = addTwoNumbers(l1.next, l2.next);
+        
+        int sum = carry;
+        if (l1 != null) {
+            sum += l1.val;
+        }
+        if (l2 != null) {
+            sum += l2.val;
+        }
+        
+        ListNode cur = new ListNode(sum % 10);
+        carry = sum / 10;
+        cur.next = tail;
+        tail = cur;
+        return tail;
+    }
+}
