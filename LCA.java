@@ -1,41 +1,35 @@
 /**
- * Definition of TreeNode:
+ * Definition for a binary tree node.
  * public class TreeNode {
- *     public int val;
- *     public TreeNode left, right;
- *     public TreeNode(int val) {
- *         this.val = val;
- *         this.left = this.right = null;
- *     }
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
  * }
  */
+class Solution {
+    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+        // Root job? 如果p或q其中一個等於root, 回傳root本身 / 如果左右子樹都有東西, LCA就是root本身 / 
 
-
-public class Solution {
-    /*
-     * @param root: The root of the binary search tree.
-     * @param A: A TreeNode in a Binary.
-     * @param B: A TreeNode in a Binary.
-     * @return: Return the least common ancestor(LCA) of the two nodes.
-     */
-    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode A, TreeNode B) {
-        if (root == null || root == A || root == B) {
+        // 不能使用root.val == p.val 萬一p有重複元素會錯
+        if (root == null ||root == p || root == q) {
             return root;
         }
         
-        TreeNode left = lowestCommonAncestor(root.left, A, B);
-        TreeNode right = lowestCommonAncestor(root.right, A, B);
+        TreeNode left = lowestCommonAncestor(root.left, p, q);
+        TreeNode right = lowestCommonAncestor(root.right, p, q);
         
         if (left != null && right != null) {
             return root;
         }
+        
         if (left != null) {
             return left;
         }
         if (right != null) {
             return right;
         }
-        
         return null;
+        
     }
 }

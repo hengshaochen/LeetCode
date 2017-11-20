@@ -1,3 +1,50 @@
+// Review 11/19:
+/**
+ * Definition for an interval.
+ * public class Interval {
+ *     int start;
+ *     int end;
+ *     Interval() { start = 0; end = 0; }
+ *     Interval(int s, int e) { start = s; end = e; }
+ * }
+ */
+class Solution {
+    public List<Interval> merge(List<Interval> intervals) {
+        List<Interval> ans = new ArrayList<>();
+        if (intervals.size() == 0) {
+            return ans;
+        }
+        // 按照start來sort, 之後就能只比較end
+        /*
+        [1,3] [2,6] --> [1,6]
+        [1,6] [8,10] --> [1,6] [8,10]
+        [8,10], [15,18] --> [1,6] [8,10] [15,18]
+        */
+        
+        Comparator<Interval> cmp = new Comparator<Interval>() {
+            public int compare(Interval e1, Interval e2) {
+                return e1.start - e2.start;
+            }    
+        };
+        Collections.sort(intervals, cmp);
+        
+        Interval pre = intervals.get(0);
+        for (int i = 1; i < intervals.size(); i++) {
+            Interval cur = intervals.get(i);
+            if (pre.end >= cur.start) {
+                // 合併
+                pre.end = Math.max(pre.end, cur.end);
+            } else {
+                ans.add(pre);
+                pre = cur;
+            }
+        }
+        ans.add(pre);
+        
+        return ans;
+    }
+}
+
 /**
  * Definition of Interval:
  * public class Interval {
