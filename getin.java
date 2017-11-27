@@ -810,3 +810,190 @@ public class Solution {
     }
 }
 
+// 103. Binary Tree Zigzag Level Order Traversal
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+public class Solution {
+    public List<List<Integer>> zigzagLevelOrder(TreeNode root) {
+        List<List<Integer>> ans = new ArrayList<List<Integer>>();
+        if (root == null) { return ans; }
+        Queue<TreeNode> q = new LinkedList<TreeNode>();
+        q.add(root);
+        
+        // while (q != null) 會有bug 改成isEmpty() ok!
+        boolean isEven = false;
+        while (!q.isEmpty()) {
+            int LevelSize = q.size();
+            ArrayList<Integer> local = new ArrayList<Integer>();
+            for (int i=0 ; i < LevelSize ; i++) {
+                TreeNode currentNode = q.remove();
+                if (currentNode.left != null) { q.add(currentNode.left); }
+                if (currentNode.right != null) { q.add(currentNode.right); }
+                local.add(currentNode.val);
+            }
+            if (isEven == false) {
+                ans.add(local);
+                isEven = true;
+            } else {
+                Collections.reverse(local);
+                ans.add(local);
+                isEven = false;
+            }
+        }
+        return ans;
+    }
+}
+
+// 88. Merge Sorted Array
+class Solution {
+    public void merge(int[] nums1, int m, int[] nums2, int n) {
+        // [1,3,5,9]
+        // [2,10]
+        int idx = m + n - 1;
+        int p1 = m - 1;
+        int p2 = n - 1;
+        while (p1 >= 0 && p2 >= 0) {
+            if (nums1[p1] < nums2[p2]) {
+                nums1[idx--] = nums2[p2--];
+            } else {
+                nums1[idx--] = nums1[p1--];
+            }
+        }
+        while (p2 >= 0) {
+            nums1[idx--] = nums2[p2--];
+        }
+    }
+}
+
+// 3. Longest Substring Without Repeating Characters
+
+// 225. Implement Stack using Queues
+
+// 105. Construct Binary Tree from Preorder and Inorder Traversal
+
+// 141. Linked List Cycle
+public class Solution {
+    /**
+     * @param head: The first node of linked list.
+     * @return: True if it has a cycle, or false
+     */
+    public boolean hasCycle(ListNode head) {  
+        if (head == null) { return false; }
+        ListNode fast = head.next;
+        ListNode slow = head;
+        
+        while (fast != slow) {
+            // 若任一指標都指向null --> 沒cycle
+            // 要加fast.next是因為避免outOfBoundary,
+            // 若fast.next為null, fast.next.next會outOfBoundary
+            if (fast == null || fast.next == null) {
+                return false;
+            }
+            fast = fast.next.next;
+            slow = slow.next;
+        }
+        // 若fast == true, 代表快慢指標相遇 --> 有cycle
+        return true;
+    }
+}
+
+// 208. Implement Trie (Prefix Tree)
+
+// 230. Kth Smallest Element in a BST
+
+// 5. Longest Palindromic Substring
+
+// 26. Remove Duplicates from Sorted Array
+public class Solution {
+    /*
+     * @param nums: An ineger array
+     * @return: An integer
+     */
+    public int removeDuplicates(int[] nums) {
+        if (nums.length == 0) { return 0; }
+        int i = 0;   // i的左邊包含i, 都是沒有重複的
+        int j = 1;   // j去找和i不同的
+        
+        while (j < nums.length) {
+            if (nums[j] != nums[i]) {
+                nums[++i] = nums[j];
+            } 
+            j++;
+        }
+        return i + 1;
+    }
+}
+
+// 33. Search in Rotated Sorted Array
+class Solution {
+    public int search(int[] nums, int target) {
+        if (nums.length == 0) { return -1; }
+        int start = 0;
+        int end = nums.length - 1;
+        
+        while (start + 1 < end) {
+            int mid = start + (end - start) / 2;
+            if (nums[mid] == target) {
+                return mid;
+            }
+            if (nums[mid] > nums[start]) {
+                // red line
+                if (target >= nums[start] && target <= nums[mid]) {
+                    end = mid;
+                } else {
+                    start = mid;
+                }
+            } else {
+                // green line (nums[mid] < nums[start])
+                if (target >= nums[mid] && target <= nums[end]) {
+                    start = mid;
+                } else {
+                    end = mid;
+                }
+            }
+        }
+        
+        if (nums[start] == target) {
+            return start;
+        }
+        if (nums[end] == target) {
+            return end;
+        }
+        return -1;
+    }
+}
+
+// 13. Roman to Integer
+public class Solution {
+    public int romanToInt(String s) {
+        HashMap<Character, Integer> map = new HashMap<Character, Integer>();
+        map.put('I', 1);
+        map.put('V', 5);
+        map.put('X', 10);
+        map.put('L', 50);
+        map.put('C', 100);
+        map.put('D', 500);
+        map.put('M', 1000);
+        int sum = 0;
+        for (int i = 0; i < s.length(); i++) {
+            // 當前 > 前面 --> 把上次加入的還原 並 加入(當前-前一個) 
+            if (i > 0 && map.get(s.charAt(i)) > map.get(s.charAt(i - 1))) {
+                sum = sum - map.get(s.charAt(i - 1)) + ( map.get(s.charAt(i)) - map.get(s.charAt(i - 1)) );
+            }
+            // 前面 >= 當前 --> 直接加入當前值
+            else {
+                sum = sum + map.get(s.charAt(i));
+            }
+        }
+        return sum;
+    }
+}
+
+// 8. String to Integer (atoi)
