@@ -56,3 +56,89 @@ public class Solution {
         return ans;
     }
 }
+
+// Two Sum
+class Solution {
+    public int[] twoSum(int[] nums, int target) {
+        HashMap<Integer, Integer> map = new HashMap<>();
+        int[] ans = new int[2];
+        for (int i = 0; i < nums.length; i++) {
+            if (map.containsKey(target - nums[i])) {
+                ans[0] = map.get(target - nums[i]);
+                ans[1] = i;
+                return ans;
+            } else {
+                map.put(nums[i], i);
+            }
+        }
+        return ans;
+    }
+}
+
+// Move zero
+class Solution {
+    public void moveZeroes(int[] nums) {
+        // 要讓i的左邊都為0
+        // j來traverse整個list, j指向非0就和i交換, 交換完i就可以往右移動一格了
+        // 1,2,0,3,0,5
+        //     i
+                j
+        // 1,2,3,0,0,5
+        //       i
+                   j
+        int i = 0;
+        int j = 0;
+        while (j < nums.length) {
+            if (nums[j] != 0) {
+                int temp = nums[i];
+                nums[i] = nums[j];
+                nums[j] = temp;
+                i++;
+            }
+            j++;
+        }
+        
+    }
+}
+
+// Min Stack
+class MinStack {
+    Stack<Integer> stack;
+    Stack<Integer> min_stack;
+    public MinStack() {
+        stack = new Stack<Integer>();
+        min_stack = new Stack<Integer>();
+    }
+    
+    public void push(int x) {
+        // 若min_stack的頭比新來的值大 or 為空 --> push x進入
+        if (min_stack.isEmpty() || min_stack.peek() > x) {
+            min_stack.push(x);
+        } else {
+            min_stack.push(min_stack.peek());
+        }
+        stack.push(x);
+    }
+    
+    public void pop() {
+        min_stack.pop();
+        stack.pop();
+    }
+    
+    public int top() {
+        return stack.peek();
+    }
+    
+    public int getMin() {
+        return min_stack.peek();
+    }
+}
+
+/**
+ * Your MinStack object will be instantiated and called as such:
+ * MinStack obj = new MinStack();
+ * obj.push(x);
+ * obj.pop();
+ * int param_3 = obj.top();
+ * int param_4 = obj.getMin();
+ */

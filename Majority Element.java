@@ -34,7 +34,7 @@ class Solution {
         }
 
         int max = 1;
-        int majorElement = 0;
+        int majorElement = nums[0];
         for (Map.Entry<Integer, Integer> entry : map.entrySet()) {
             if (entry.getValue() > max) {
                 max = entry.getValue();
