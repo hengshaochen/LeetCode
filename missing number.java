@@ -14,6 +14,18 @@ class Solution {
     }
 }
 
+class Solution {
+    public int missingNumber(int[] nums) {
+        // {0,1,2,3} XOR {0,1,3}
+        int ans = 0;
+        int i = 0;
+        for (i = 0; i < nums.length; i++) {
+            ans = ans ^ i ^ nums[i];
+        }
+        return ans ^ i;
+    }
+}
+
 
 // HashSet Space O(n)
 class Solution {

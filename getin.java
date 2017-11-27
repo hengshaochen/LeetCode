@@ -471,3 +471,342 @@ public class Solution {
 }
 
 // 122. Best Time to Buy and Sell Stock II
+
+// 50. Pow
+// 好方法, 把次方用2進位來算
+public class Solution {
+    /*
+     * @param x: the base number
+     * @param n: the power number
+     * @return: the result
+     */
+    public double myPow(double x, long n) {
+        if (n < 0) {
+            x = 1 / x;
+            n = -n;
+        }
+        
+        double ans = 1;
+        double now_mul = x;
+        while (n != 0) {
+            if (n % 2 == 1) {
+                ans *= now_mul;
+            }
+            now_mul *= now_mul;
+            n = n / 2;
+        }
+        
+        return ans;
+    }
+}
+
+// 42. Trapping Rain Water
+
+ 
+// 62. Unique Paths
+class Solution {
+    public int uniquePaths(int m, int n) {
+        int[][] dp = new int[m][n];
+        for (int i = 0; i < n; i++) {
+            dp[0][i] = 1;
+        }
+        for (int i = 0; i < m; i++) {
+            dp[i][0] = 1;
+        }
+        
+        for (int i = 1; i < m; i++) {
+            for (int j = 1; j < n; j++) {
+                dp[i][j] = dp[i - 1][j] + dp[i][j - 1];
+            }
+        }
+        
+        return dp[m - 1][n - 1];
+    }
+}
+
+// 63. Unique Paths II
+class Solution {
+    public int uniquePathsWithObstacles(int[][] obstacleGrid) {
+        if (obstacleGrid.length == 0 || obstacleGrid == null) {
+             return 0;
+        }
+        int m = obstacleGrid.length;
+        int n = obstacleGrid[0].length;
+        
+        int[][] dp = new int[m][n];
+        if (obstacleGrid[0][0] == 1) {
+            dp[0][0] = 0;
+        } else {
+            dp[0][0] = 1;
+        }
+        
+        for (int i = 1; i < n; i++) {
+            if (obstacleGrid[0][i] != 1) {
+                dp[0][i] = dp[0][i - 1];
+            }
+        }
+        for (int i = 1; i < m; i++) {
+            if (obstacleGrid[i][0] != 1) {
+                dp[i][0] = dp[i - 1][0];
+            }
+        }
+        
+        for (int i = 1; i < m; i++) {
+            for (int j = 1; j < n; j++) {
+                if (obstacleGrid[i][j] != 1) {
+                    dp[i][j] = dp[i - 1][j] + dp[i][j - 1];
+                }
+            }
+        }
+        
+        return dp[m - 1][n - 1];
+    }
+}
+// Add two numbers
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) {
+ *         val = x;
+ *         next = null;      
+ *     }
+ * }
+ */
+public class Solution {
+    /*
+     * @param l1: the first list
+     * @param l2: the second list
+     * @return: the sum list of l1 and l2 
+     */
+    public ListNode addLists(ListNode l1, ListNode l2) {
+        ListNode dummy = new ListNode(0);
+        ListNode tail = dummy;
+        
+        int carry = 0;
+        while (l1 != null || l2 != null) {
+            int sum = carry;
+            
+            sum += (l1 != null) ? l1.val : 0;
+            sum += (l2 != null) ? l2.val : 0;
+            
+            tail.next = new ListNode(sum % 10);
+            tail = tail.next;
+            carry = sum / 10;
+            
+            l1 = (l1 != null) ? l1.next : l1;
+            l2 = (l2 != null) ? l2.next : l2; 
+        }
+        if (carry != 0) {
+            tail.next = new ListNode(carry);
+            tail = tail.next;
+        }
+        
+        return dummy.next;
+    }
+}
+
+// 69. Sqrt(x)
+
+// 160. Intersection of Two Linked Lists
+
+// 98 Validate Binary Search Tree
+// Version1: Recursive
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    boolean ans = true;
+    public boolean isValidBST(TreeNode root) {
+        // 向右更新min, 向左更新max
+        long min = Long.MIN_VALUE;
+        long max = Long.MAX_VALUE;
+        
+        dfs(root, min, max);
+        
+        return ans;
+    }
+    
+    void dfs(TreeNode root, long min, long max) {
+        if (root == null) {
+            return;
+        }
+        if (root.val <= min || root.val >= max) {
+            ans = false;
+            return;
+        }
+        
+        dfs(root.left, min, root.val);
+        dfs(root.right, root.val, max);
+        
+    }
+}
+// Version2: Iterative
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public boolean isValidBST(TreeNode root) {
+        // 思路2: BST走中序輸出會是小到大排序好, 因此設一個pre跟cur, 如果是bst的話, cur的值一定會比pre大
+        Stack<TreeNode> s = new Stack<>();
+        TreeNode cur = root;
+        TreeNode pre = null;
+        
+        while (!s.empty() || cur != null) {
+            while (cur != null) {
+                s.push(cur);
+                cur = cur.left;
+            }
+            cur = s.pop();
+            if (pre != null && cur.val <= pre.val) {
+                return false;
+            }
+            // 存前一個node
+            pre = cur;
+            cur = cur.right;
+        }
+        
+        return true;
+        
+    }
+}
+
+// 268. Missing Number
+class Solution {
+    public int missingNumber(int[] nums) {
+        // {0,1,2,3} XOR {0,1,3}
+        
+        HashSet<Integer> set = new HashSet<>();
+        for (int i = 0; i <= nums.length; i++) {
+            set.add(i);
+        }
+        
+        for (int i = 0; i < nums.length; i++) {
+            if (set.contains(nums[i])) {
+                set.remove(nums[i]);
+            }
+        }
+        
+        Iterator it = set.iterator();
+        return (int) it.next();
+    }
+}
+
+class Solution {
+    public int missingNumber(int[] nums) {
+        // {0,1,2,3} XOR {0,1,3}
+        
+        int ans = 0;
+        // 0,1,3 length = 3, 要把0 ^ 1 ^ 2 ^ 3
+        for (int i = 0; i <= nums.length; i++) {
+            ans = ans ^ i;
+        }
+        for (int i = 0; i < nums.length; i++) {
+            ans = ans ^ nums[i];
+        }
+        return ans;
+    }
+}
+
+// 53. Maximum Subarray
+
+
+// 78. Subsets
+class Solution {
+    public List<List<Integer>> subsets(int[] nums) {
+        List<Integer> cur = new ArrayList<>();
+        List<List<Integer>> ans = new ArrayList<>();
+        
+        dfs(0, nums, cur, ans);
+        return ans;
+    }
+    
+    void dfs(int start, int[] nums, List<Integer> cur, List<List<Integer>> ans) {
+        ans.add(new ArrayList<>(cur));
+        
+        for (int i = start; i < nums.length; i++) {
+            cur.add(nums[i]);
+            dfs(i + 1, nums, cur, ans);
+            cur.remove(cur.size() - 1);
+        }
+        
+        
+    }
+}
+
+
+// 215. Kth Largest Element in an Array
+class Solution {
+    public int findKthLargest(int[] nums, int k) {
+        // Version1: Priority Queue
+        Comparator<Integer> cmp = new Comparator<Integer>() {
+            public int compare(Integer e1, Integer e2) {
+                return e1 - e2;
+            }
+        };
+        
+        PriorityQueue<Integer> minHeap = new PriorityQueue<Integer>(k, cmp);
+        for (int i = 0; i < nums.length; i++) {
+            if (minHeap.size() < k) {
+                minHeap.offer(nums[i]);
+            } else {
+                if (minHeap.peek() < nums[i]) {
+                    minHeap.poll();
+                    minHeap.offer(nums[i]);
+                }
+            }
+        }
+        return minHeap.peek();
+    }
+}
+
+// 49. Group Anagrams
+
+
+// 386. Lexicographical Numbers
+
+// 139. Word Break 
+
+// 151. Reverse Words in a String
+
+// 102. Binary Tree Level Order Traversal
+public class Solution {
+    /**
+     * @param root: The root of binary tree.
+     * @return: Level order a list of lists of integer
+     */
+    public ArrayList<ArrayList<Integer>> levelOrder(TreeNode root) {
+        ArrayList<ArrayList<Integer>> ans = new ArrayList<ArrayList<Integer>>();
+        if (root == null) { return ans; }
+        Queue<TreeNode> q = new LinkedList<TreeNode>();
+        q.add(root);
+        
+        // while (q != null) 會有bug 改成isEmpty() ok!
+        while (!q.isEmpty()) {
+            int LevelSize = q.size();
+            ArrayList<Integer> local = new ArrayList<Integer>();
+            for (int i=0 ; i < LevelSize ; i++) {
+                TreeNode currentNode = q.remove();
+                if (currentNode.left != null) { q.add(currentNode.left); }
+                if (currentNode.right != null) { q.add(currentNode.right); }
+                local.add(currentNode.val);
+            }
+            ans.add(local);
+        }
+        return ans;
+    }
+}
+
