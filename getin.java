@@ -471,6 +471,18 @@ public class Solution {
 }
 
 // 122. Best Time to Buy and Sell Stock II
+class Solution {
+    public int maxProfit(int[] prices) {
+        int sum = 0;
+        
+        for (int i = 1; i < prices.length; i++) {
+            if (prices[i] > prices[i - 1]) {
+                sum = sum + (prices[i] - prices[i - 1]);
+            }
+        }
+        return sum;
+    }
+}
 
 // 50. Pow
 // 好方法, 把次方用2進位來算
@@ -997,3 +1009,183 @@ public class Solution {
 }
 
 // 8. String to Integer (atoi)
+
+// 63 Unique Paths II
+class Solution {
+    public int uniquePathsWithObstacles(int[][] obstacleGrid) {
+        if (obstacleGrid.length == 0 || obstacleGrid == null) {
+             return 0;
+        }
+        int m = obstacleGrid.length;
+        int n = obstacleGrid[0].length;
+        
+        int[][] dp = new int[m][n];
+        if (obstacleGrid[0][0] == 1) {
+            dp[0][0] = 0;
+        } else {
+            dp[0][0] = 1;
+        }
+        
+        for (int i = 1; i < n; i++) {
+            if (obstacleGrid[0][i] != 1) {
+                dp[0][i] = dp[0][i - 1];
+            }
+        }
+        for (int i = 1; i < m; i++) {
+            if (obstacleGrid[i][0] != 1) {
+                dp[i][0] = dp[i - 1][0];
+            }
+        }
+        
+        for (int i = 1; i < m; i++) {
+            for (int j = 1; j < n; j++) {
+                if (obstacleGrid[i][j] != 1) {
+                    dp[i][j] = dp[i - 1][j] + dp[i][j - 1];
+                }
+            }
+        }
+        
+        return dp[m - 1][n - 1];
+    }
+}
+
+// 297. Serialize and Deserialize Binary Tree
+
+// 172. Factorial Trailing Zeroes
+
+// 101. Symmetric Tree
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    boolean ans = true;
+    public boolean isSymmetric(TreeNode root) {
+        if (root == null) { return ans; }
+        helper(root.left, root.right);
+        return ans;
+    }
+    public void helper(TreeNode l, TreeNode r) {
+        if (l == null && r == null) {
+            return;
+        }
+        
+        if ((l == null && r != null) || (l != null && r == null)) {
+            ans = false;
+            return;
+        }
+        
+        if (l.val == r.val) {
+            helper(l.left, r.right);
+            helper(l.right, r.left);
+        } else {
+            ans = false;
+        }
+        
+    }
+}
+
+// 79. Word Search
+
+// 100. Same Tree
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+public class Solution {
+    boolean same = true;
+    public boolean isSameTree(TreeNode p, TreeNode q) {
+        if( p == null && q == null ) return true;
+        isSameTreeHelper(p, q);
+        return same;
+    }
+    private void isSameTreeHelper(TreeNode p, TreeNode q) {
+        if(p!=null && q!=null)
+        {
+                isSameTreeHelper(p.left,q.left);
+                isSameTreeHelper(p.right,q.right);
+                if (p.val != q.val) {
+                    same = false;
+                }
+        }
+        else if( (p == null && q != null) || (p != null && q == null) )
+        {
+            same = false;
+        }
+    }
+}
+
+// 189. Rotate Array
+
+
+// 15. 3Sum (Three Sum)
+class Solution {
+    List<List<Integer>> ans = new ArrayList<>();
+    public List<List<Integer>> threeSum(int[] nums) {
+        Arrays.sort(nums);
+        for (int i = 0; i < nums.length; i++) {
+            int target = -nums[i];
+            // 去重
+            if (i >= 1 && nums[i] == nums[i - 1]) {
+                continue;
+            }
+            twoSum(nums, i + 1, nums.length - 1, target);
+        }
+        return ans;
+    }
+    public void twoSum(int[] nums, int start, int end, int target) {
+        int i = start;
+        int j = end;
+        
+        while (i < j) {
+            List<Integer> local = new ArrayList<>();
+            if (nums[i] + nums[j] == target) {
+                local.add(-target);
+                local.add(nums[i]);
+                local.add(nums[j]);
+                ans.add(local);
+                i++;
+                j--;
+                while (i < j && nums[i] == nums[i - 1]) {
+                    i++;
+                }
+                while (i < j && nums[j] == nums[j + 1]) {
+                    j--;
+                }
+            } else if (nums[i] + nums[j] < target) {
+                i++;
+            } else {
+                j--;
+            }
+        }
+    }
+}
+
+// 266. Palindrome Permutation
+
+
+// 547. Friend Circles
+
+// 11. Container With Most Water
+
+// 158. Read N Characters Given Read4 II - Call multiple times
+
+// 570. Managers with at Least 5 Direct Reports
+
+// 131. Palindrome Partitioning
+
+// 274. H-Index
+
+// 669. Trim a Binary Search Tree
+
+// 714. Best Time to Buy and Sell Stock with Transaction Fee
