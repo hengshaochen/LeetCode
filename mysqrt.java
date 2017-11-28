@@ -21,6 +21,7 @@ class Solution {
         while (start + 1 < end) {
             long mid = start + (end - start) / 2;
             long cur = mid * mid;
+            // cur >= x 代表目標一定在現在end的左邊或是end
             if (cur >= x) {
                 end = mid;
             } else {
@@ -28,6 +29,7 @@ class Solution {
             }
         }
         
+        // 先看end若end符合就回傳end, 因為end符合就不可能是start, 因start一定也符合 start * start < x的條件
         if (end * end <= x) {
             return (int)end;
         }
