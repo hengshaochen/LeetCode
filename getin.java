@@ -307,6 +307,49 @@ class Solution {
 }
 
 // 117. Populating Next Right Pointers in Each Node
+// Correct
+/**
+ * Definition for binary tree with next pointer.
+ * public class TreeLinkNode {
+ *     int val;
+ *     TreeLinkNode left, right, next;
+ *     TreeLinkNode(int x) { val = x; }
+ * }
+ */
+public class Solution {
+    public void connect(TreeLinkNode root) {
+        if (root == null) {
+            return;
+        }
+        
+        // 找下一個應該要接的點
+        TreeLinkNode nextNode = root.next;
+        while (nextNode != null) {
+            if (nextNode.left != null) {
+                nextNode = nextNode.left;
+                break;
+            } else if (nextNode.right != null) {
+                nextNode = nextNode.right;
+                break;
+            }
+            nextNode = nextNode.next;
+        }
+        
+        // 接上去, 右邊優先, 在接左邊
+        if (root.right != null) {
+            root.right.next = nextNode;
+            if (root.left != null) {
+                root.left.next = root.right;
+            }
+        } else if (root.left != null) {
+                root.left.next = nextNode;
+        }
+        // 先走右邊在走左邊
+        connect(root.right);
+        connect(root.left);
+        
+    }
+}
 
 
 // 20. Valid Parentheses
@@ -620,6 +663,43 @@ public class Solution {
 }
 
 // 69. Sqrt(x)
+// O(n^0.5)
+class Solution {
+    public int mySqrt(int x) {
+        long ans = 1;
+        
+        while (ans * ans <= x) {
+            ans += 1;
+        }
+        
+        return (int) ans - 1;
+    }
+}
+
+// binary search: O(logn)
+class Solution {
+    public int mySqrt(int x) {
+        // 把這個問題轉成binary search, 要在1~x中找到一個數字, 該數字^2 會> x的
+        long start = 1;
+        long end = x;
+        
+        while (start + 1 < end) {
+            long mid = start + (end - start) / 2;
+            long cur = mid * mid;
+            if (cur >= x) {
+                end = mid;
+            } else {
+                start = mid;
+            }
+        }
+        
+        if (end * end <= x) {
+            return (int)end;
+        }
+        return (int)start;
+        
+    }
+}
 
 // 160. Intersection of Two Linked Lists
 
