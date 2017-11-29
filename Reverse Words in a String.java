@@ -1,25 +1,18 @@
-// BUG : ab     d --> d     ab  應該要d ab
-class Main {
-    public static void main(String[] args) {
-        String s = "   ";
-        String ans = "";
-        
-        int start = 0;
-        for (int i = 0; i < s.length(); i++) {
-            if (i < s.length() -1 && s.charAt(i) == ' ' && s.charAt(i + 1) == ' ')              {
-                continue;
-            }
-            
-            if (s.charAt(i) == ' ') {
-                ans = s.substring(start, i) + ' ' + ans;
-                start = i + 1;
-            } else if (i == s.length() - 1) {
-                // 處理最後一個
-                ans = s.substring(start, i + 1) + ' ' + ans;
+// 面試用這個版本**
+public class Solution {
+    public String reverseWords(String s) {
+        String[] sp = s.split(" ");
+        StringBuilder ans = new StringBuilder();
+        for (int i = sp.length - 1; i >= 0; i--) {
+            if (!sp[i].equals("")) {
+                ans.append(sp[i] + " ");
             }
         }
-        // 去掉最後面的空格
-        System.out.println(ans.substring(0, ans.length() - 1));
+        if (ans.length() == 0) {
+            return "";
+        }
+        // 去除最後一個多得空格
+        return ans.substring(0, ans.length() - 1);
     }
 }
 
@@ -39,6 +32,42 @@ public class Solution {
             return ans; 
         }
         return ans.substring(1, ans.length());
+    }
+}
+
+// 下面這種方法正確要基於 詞根詞之間只有一個空格
+public class Solution {
+    public String reverseWords(String s) {
+        char[] rev = s.toCharArray();
+        // 先整個翻轉 facebook offer heng --> gneh reffo koobecaf
+        reverse(0, rev.length - 1, rev);
+        // 個別一個字母一個字母翻轉
+        int start = 0;
+        int end = 0;
+        while (end < rev.length) {
+            // start確認不為空, end找空格的位置
+            while (start < rev.length && rev[start] == ' ') {
+                start++;
+            }
+            end = start;
+            
+            while (end < rev.length && rev[end] != ' ') {
+                end++;
+            }
+            reverse(start, end - 1, rev);
+            start = end + 1;
+        }
+        return new String(rev);
+    }
+    
+    void reverse(int start, int end, char[] input) {
+        while (start < end) {
+            char temp = input[start];
+            input[start] = input[end];
+            input[end] = temp;
+            start++;
+            end--;
+        }
     }
 }
 

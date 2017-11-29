@@ -868,7 +868,28 @@ class Solution {
 }
 
 // 53. Maximum Subarray
-
+class Solution {
+    public int maxSubArray(int[] nums) {
+        int max = Integer.MIN_VALUE;
+        int min = 0;  // min要是0, 不能是MAX_VALUE
+        
+        // 算prefix
+        int prefix = 0;
+        
+        for (int i = 0; i < nums.length; i++) {
+            prefix = prefix + nums[i];
+            // 要先寫max這行再寫min這行
+            if (max < prefix - min) {
+                max = prefix - min;
+            }
+            if (min > prefix) {
+                min = prefix;
+            }
+        }
+        
+        return max;
+    }
+}
 
 // 78. Subsets
 class Solution {
@@ -920,13 +941,124 @@ class Solution {
 }
 
 // 49. Group Anagrams
-
+class Solution {
+    public List<List<String>> groupAnagrams(String[] strs) {
+        // 建立一個HashMap, key是string, value是該string的答案arraylist
+        // 針對每一個String排序, 若排序後的字在hashmap中, 則加入, 不在則新增至map中
+        List<List<String>> ans = new ArrayList<>();
+        
+        // Arrays.sort不支援String, 要用char
+        Map<String, List<String>> map = new HashMap<>();
+        
+        for (int i = 0; i < strs.length; i++) {
+            char[] cur = strs[i].toCharArray();
+            Arrays.sort(cur);
+            String sorted_string = new String(cur);
+            if (!map.containsKey(sorted_string)) {
+                List<String> newlist = new ArrayList<>();
+                newlist.add(strs[i]);
+                map.put(sorted_string, newlist);
+            } else {
+                map.get(sorted_string).add(strs[i]);
+            }
+        }
+        
+        // 遍歷hashmap放到答案中
+        for (Map.Entry<String, List<String>> entry : map.entrySet()) {
+            ans.add(entry.getValue());
+        }
+        
+        return ans;
+    }
+}
 
 // 386. Lexicographical Numbers
+class Solution {
+    public List<Integer> lexicalOrder(int n) {
+        // 法1. 把所有int轉成String, 接著sort比較 --> 超時 O(n + nlogn + n)
+        String[] str = new String[n];
+        for (int i = 1; i <= n; i++) {
+            // Integer to String
+            str[i - 1] = String.valueOf(i);
+        }
+        
+        Arrays.sort(str);
+        
+        List<Integer> ans = new ArrayList<>();
+        for (int i = 0; i < str.length; i++) {
+            // String to Integer
+            ans.add(Integer.parseInt(str[i]));
+        }
+        
+        return ans;
+    }
+}
 
-// 139. Word Break 
+
+// 139. Word Break
+public class Solution {
+    /*
+     * @param s: A string
+     * @param dict: A dictionary of words dict
+     * @return: A boolean
+     */
+    public boolean wordBreak(String s, Set<String> dict) {
+        if (s.length() == 0) { return true; }
+        
+        HashMap<String, Boolean> map = new HashMap<>();
+        //boolean ans = false;
+        
+        // DFS去走訪所有切割方式 + 剪枝
+        return dfs(s, dict, map);
+        
+        //return ans;
+    }
+    
+    boolean dfs(String s, Set<String> dict, HashMap<String, Boolean> map)
+    {
+        // 已經算過了（在Map中）直接return
+        if (map.containsKey(s)) {
+            return map.get(s);
+        }
+        // 如果s在字典中, 答案直接變true, 因為可以左邊切為空集合, 右邊為s
+        if (dict.contains(s)) {
+            map.put(s, true);
+            return true;
+        }
+        
+        // DFS遞回 + 剪枝
+        for (int i = 1; i < s.length(); i++) {
+            String left = s.substring(0, i);
+            String right = s.substring(i, s.length());
+            
+            if (dfs(left, dict, map) == true && dict.contains(right)) {
+                map.put(s, true);
+                return true;
+            }
+        }
+        // 如果s的所有切割方式都不行組成字典中的字
+        map.put(s, false);
+        return false;
+    }
+}
 
 // 151. Reverse Words in a String
+public class Solution {
+    public String reverseWords(String s) {
+        String[] sp = s.split(" ");
+        StringBuilder ans = new StringBuilder();
+        for (int i = sp.length - 1; i >= 0; i--) {
+            if (!sp[i].equals("")) {
+                ans.append(sp[i] + " ");
+            }
+        }
+        if (ans.length() == 0) {
+            return "";
+        }
+        // 去除最後一個多得空格
+        return ans.substring(0, ans.length() - 1);
+    }
+}
 
 // 102. Binary Tree Level Order Traversal
 public class Solution {
@@ -1021,6 +1153,47 @@ class Solution {
 // 3. Longest Substring Without Repeating Characters
 
 // 225. Implement Stack using Queues
+class MyStack {
+    Queue<Integer> q = new LinkedList<>();
+    /** Initialize your data structure here. */
+    public MyStack() {
+        
+    }
+    
+    /** Push element x onto stack. */
+    public void push(int x) {
+        // 每次加進來後反轉
+        q.add(x);
+        // 只要跑size - 1次就可以把剛剛加入的放到最前面了
+        for (int i = 1; i < q.size(); i++) {
+            q.add(q.remove());
+        }
+    }
+    
+    /** Removes the element on top of the stack and returns that element. */
+    public int pop() {
+        return q.remove();
+    }
+    
+    /** Get the top element. */
+    public int top() {
+        return q.peek();
+    }
+    
+    /** Returns whether the stack is empty. */
+    public boolean empty() {
+        return q.isEmpty();
+    }
+}
+
+/**
+ * Your MyStack object will be instantiated and called as such:
+ * MyStack obj = new MyStack();
+ * obj.push(x);
+ * int param_2 = obj.pop();
+ * int param_3 = obj.top();
+ * boolean param_4 = obj.empty();
+ */
 
 // 105. Construct Binary Tree from Preorder and Inorder Traversal
 
