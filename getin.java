@@ -1151,6 +1151,53 @@ class Solution {
 }
 
 // 3. Longest Substring Without Repeating Characters
+// Accept O(n^2)
+class Solution {
+    public int lengthOfLongestSubstring(String s) {
+        if (s.length() == 0) {
+            return 0;
+        }
+        int max = 1;
+        int i = 0;
+        //for (int i = 0; i < s.length(); i++) {
+        while (i < s.length()) {
+            // System.out.println(i);
+            HashSet<Character> set = new HashSet<>();
+            int cur_length = 0;
+            for (int j = i; j < s.length(); j++) {
+                if (!set.contains(s.charAt(j))) {
+                    set.add(s.charAt(j));
+                    cur_length++;
+                    max = Math.max(max, cur_length);
+                } else {
+                    break;
+                }
+            }
+            i++;
+        }
+        return max;
+    }
+}
+// 較快的解法 大約是O(2n)
+class Solution {
+    public int lengthOfLongestSubstring(String s) {
+        HashSet<Character> set = new HashSet<>();
+        
+        // i左邊, j右邊
+        int i = 0, j = 0, max = 0;
+        while (j < s.length()) {
+            if (!set.contains(s.charAt(j))) {
+                set.add(s.charAt(j++));
+                // set的當前size就是當前的子序列長度
+                max = Math.max(max, set.size());
+            } else {
+                // 如果當前想加入的j, 有在set中, 從set中移除元素, 直到沒有重複
+                set.remove(s.charAt(i++));
+            }
+        }
+        return max;
+    }
+}
 
 // 225. Implement Stack using Queues
 class MyStack {
@@ -1196,6 +1243,46 @@ class MyStack {
  */
 
 // 105. Construct Binary Tree from Preorder and Inorder Traversal
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    HashMap<Integer, Integer> map = new HashMap<>();
+    public TreeNode buildTree(int[] preorder, int[] inorder) {
+        if (preorder == null ||  inorder == null) {
+            return null;
+        }
+        for (int i = 0; i < inorder.length; i++) {
+            map.put(inorder[i], i);
+        }
+        
+        return buildTree(inorder, 0, inorder.length - 1, preorder, 0, preorder.length - 1);
+    }
+    
+    TreeNode buildTree(int[] inorder, int in_start, int in_end, int[] preorder, int pre_start, int pre_end) {
+        if (in_start > in_end) {
+            return null;
+        }
+        
+        int root_idx = map.get(preorder[pre_start]);
+        TreeNode root = new TreeNode(preorder[pre_start]);
+        
+        // System.out.println("inorder:" + in_start +" " + in_end +" preOrder"+pre_start +" " + pre_end);
+        
+        root.left = buildTree(inorder, in_start, root_idx - 1,
+                              preorder, pre_start + 1, pre_start + 1 + (root_idx - 1 - in_start));
+        root.right = buildTree(inorder, root_idx + 1, in_end,
+                               preorder, pre_start + 1 + (root_idx - 1 - in_start) + 1, pre_end);
+        
+        return root;
+    }
+}
 
 // 141. Linked List Cycle
 public class Solution {
@@ -1226,8 +1313,123 @@ public class Solution {
 // 208. Implement Trie (Prefix Tree)
 
 // 230. Kth Smallest Element in a BST
+class Solution {
+    int ans = -1;
+    int count = 0;
+    public int kthSmallest(TreeNode root, int k) {
+        // inorder traversal, and pick with kth element
+        inorder(root, k);
+        return ans;
+    }
+    void inorder(TreeNode root, int k) {
+        if (root == null) {
+            return;
+        }
+        
+        inorder(root.left, k);
+        count++;
+        
+        if (k == count) {
+            ans = root.val;
+        }
+        
+        inorder(root.right, k);        
+    }
+}
+
+// iterative:
+class Solution {
+    public int kthSmallest(TreeNode root, int k) {
+        Stack<TreeNode> s = new Stack<>();
+        TreeNode cur = root;
+        
+        while (!s.isEmpty() || cur != null) {
+            while (cur != null) {
+                s.push(cur);
+                cur = cur.left;
+            }
+            cur = s.pop();
+            k--;
+            if (k == 0) {
+                return cur.val;
+            }
+            
+            cur = cur.right;
+        }
+        
+        return -1;
+    }
+}
 
 // 5. Longest Palindromic Substring
+// 法1: 暴力法 O(n^3)
+class Solution {
+    public String longestPalindrome(String s) {
+        int max = 0;
+        String ans = "";
+        for (int i = 0; i < s.length(); i++ ) {
+            for (int j = i; j < s.length(); j++) {
+                if (isPalindrome(s, i, j)) {
+                    if (max < j - i + 1) {
+                        max = j - i + 1;
+                        ans = s.substring(i, j + 1);
+                    }
+                }
+            }
+        }
+        return ans;
+    }
+    public boolean isPalindrome(String s, int i, int j) {
+        while (i < j) {
+            while (i < j && !Character.isLetterOrDigit(s.charAt(i))) {
+                i++;
+            }
+            while (i < j && !Character.isLetterOrDigit(s.charAt(j))) {
+                j--;
+            }
+            
+            if (Character.toLowerCase(s.charAt(i)) !=
+                Character.toLowerCase(s.charAt(j))) {
+                    return false;
+                }
+            i++;
+            j--;
+        }
+        return true;
+    }
+}
+
+// 法2: DP, 如果左右兩邊相等, 用dp算過且紀錄過的中間是回文 --> 是回文
+// 去除中間要重算是不是回文的冗余 O(n^2)
+
+class Solution {
+    public String longestPalindrome(String s) {
+        int n = s.length();
+        String ans = "";
+        
+        boolean[][] dp = new boolean[n][n];
+        
+        for (int i = n - 1; i >= 0; i--) {
+            for (int j = i; j < n; j++) {
+                // 如果最左右兩邊的相等 且
+                // 中間（之前dp已經存起來, 算過的）也是true 或 中間長度 < 1, 代表中間是回文 --> 這個新的長度的就是回文
+                // 因為中間長度若是1, aba 中間只有一個b, 中間一定是回文. 因此要多一個or條件 j - i < 3
+                if (s.charAt(i) == s.charAt(j)
+                    && (j - i < 3 || dp[i + 1][j - 1] == true)) {
+                    dp[i][j] = true;
+                } else {
+                    dp[i][j] = false;
+                }
+                
+                // 如果這次的true比之前的長 --> 更新
+                if (dp[i][j] == true && j - i + 1 > ans.length()) {
+                    ans = s.substring(i, j + 1);
+                }
+            }
+        }
+        return ans;
+    }
+}
 
 // 26. Remove Duplicates from Sorted Array
 public class Solution {
