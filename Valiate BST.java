@@ -16,7 +16,7 @@ public class Solution {
         if (root.val <= min || root.val >= max){
             return false;
         }
-        return divConq(root.left, min, Math.min(max, root.val)) && 
-                divConq(root.right, Math.max(min, root.val), max);
+        return divConq(root.left, min, root.val) && 
+                divConq(root.right, root.val, max);
     }
 }
